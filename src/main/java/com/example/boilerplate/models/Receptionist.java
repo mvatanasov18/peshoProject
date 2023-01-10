@@ -4,15 +4,13 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "Doctors")
+@Table(name = "Receptionists")
 @Data
-public class Doctor {
+public class Receptionist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ID;
-    @Column(name = "Specialization")
-    private String specialization;
-    @Column(name = "Email",unique = true)
+    @Column(name="Email" , unique = true)
     private String email;
     @ManyToOne
     @JoinColumn(name = "UserID")
@@ -21,5 +19,4 @@ public class Doctor {
     @JoinColumn(name = "AddressID")
     private Address address;
 }
-
 

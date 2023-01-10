@@ -4,21 +4,17 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "Users")
+@Table(name = "Relatives")
 @Data
-public class User {
+public class Relative {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ID;
-    @Column(name = "Username",unique = true)
-    private String username;
-    @Column(name = "Password")
-    private String password;
     @Column(name = "FirstName")
     private String firstName;
     @Column(name = "LastName")
     private String lastName;
-    @Column(name = "Phone")
+    @Column(name = "Phone",length = 12)
     private String phone;
     @ManyToOne
     @JoinColumn(name = "AddressID")
