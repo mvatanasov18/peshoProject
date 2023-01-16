@@ -92,3 +92,26 @@ END
 GO
 
 
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE   TRIGGER [dbo].[HashPassword]
+    ON  [dbo].[Users]
+    INSTEAD OF INSERT
+    AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO Users(Username,[Password],FirstName,LastName,Phone,AddressID)
+    SELECT
+        i.Username,
+        HASHBYTES('SHA2_512',i.[Password]),
+        i.FirstName,
+        i.LastName,
+        i.Phone,
+        i.AddressID
+    FROM inserted AS i
+
+END
