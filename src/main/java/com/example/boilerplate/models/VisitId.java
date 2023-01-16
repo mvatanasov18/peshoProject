@@ -1,5 +1,6 @@
 package com.example.boilerplate.models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -12,7 +13,9 @@ import java.io.Serializable;
 @Setter
 @EqualsAndHashCode
 public class VisitId implements Serializable {
+    @Column(name = "PatientID")
     private int patientId;
+    @Column(name = "RelativeID")
     private int relativeId;
 
     public VisitId() {}

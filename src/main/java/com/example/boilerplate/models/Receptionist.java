@@ -15,8 +15,5 @@ public class Receptionist {
     @ManyToOne
     @JoinColumn(name = "UserID")
     private User user;
-    @ManyToOne
-    @JoinColumn(name = "AddressID")
-    private Address address;
 }
 
