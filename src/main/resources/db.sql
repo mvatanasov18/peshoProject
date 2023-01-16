@@ -58,4 +58,37 @@ CREATE TABLE Visits(
                        VisitTime datetime2(0) NOT NULL,
                        FOREIGN KEY (PatientID) REFERENCES Patients(ID),
                        FOREIGN KEY (RelativeID) REFERENCES Relatives(ID)
-)
+);
+
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE CreateUser
+
+    @Username varchar(100),
+    @Password varchar(MAX),
+    @FirstName nvarchar(100),
+    @LastName nvarchar(100),
+    @Phone char(12),
+    @AddressID int
+
+AS
+BEGIN
+
+    SET NOCOUNT ON;
+    INSERT INTO Users(Username,[Password],FirstName,LastName,Phone,AddressID)
+    VALUES(
+              @Username,
+              CONVERT(varbinary(MAX),@Password),
+              @FirstName,
+              @LastName,
+              @Phone,
+              @AddressID)
+
+END
+GO
+
+
