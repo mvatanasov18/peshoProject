@@ -9,14 +9,14 @@ import java.sql.Date;
 @Table(name = "Visits")
 @Data
 public class Visit {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int ID;
+    @EmbeddedId
+    private VisitId visitId;
+
     @ManyToOne
-    @JoinColumn(name = "PatientID")
+    @JoinColumn(name = "PatientID", insertable = false, updatable = false)
     private Patient patient;
     @ManyToOne
-    @JoinColumn(name = "RelativeID")
+    @JoinColumn(name = "RelativeID", insertable = false, updatable = false)
     private Relative relative;
     @Column(name = "VisitTime")
     private Date visitTime;
