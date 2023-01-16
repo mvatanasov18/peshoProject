@@ -115,3 +115,22 @@ BEGIN
     FROM inserted AS i
 
 END
+
+
+    SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE CheckPassword
+    @username varchar(100),
+    @password varchar(MAX)
+AS
+BEGIN
+
+    SET NOCOUNT ON;
+
+    SELECT IIF (HASHBYTES('SHA2_512',@password)= [Password],1,0)
+    FROM Users
+    WHERE Username=@username
+END
+GO
