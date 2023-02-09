@@ -1,19 +1,33 @@
 package com.example.boilerplate.models;
 
 import jakarta.persistence.*;
-import lombok.Data;
+
+import java.util.UUID;
 
 @Entity
 @Table(name = "Receptionists")
-@Data
 public class Receptionist {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int ID;
-    @Column(name="Email" , unique = true)
-    private String email;
-    @ManyToOne
-    @JoinColumn(name = "UserID")
-    private User user;
-}
+    @Column(name = "Id",nullable = false,columnDefinition = "varchar(36")
+    private String id;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "UserId",unique = true,referencedColumnName = "Id",columnDefinition ="varchar(36)")
+    private User user;
+    public Receptionist(){
+
+        this.id= UUID.randomUUID().toString();
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+}
