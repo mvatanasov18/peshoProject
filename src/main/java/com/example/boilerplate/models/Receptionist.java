@@ -2,6 +2,7 @@ package com.example.boilerplate.models;
 
 import jakarta.persistence.*;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -14,6 +15,13 @@ public class Receptionist {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "UserId",unique = true,referencedColumnName = "Id",columnDefinition ="varchar(36)")
     private User user;
+
+    @ManyToMany
+    @JoinTable(name = "ReceptionistsTreatments"
+            ,joinColumns = @JoinColumn(name = "ReceptionistId"),
+            inverseJoinColumns = @JoinColumn(name = "TreatmentId"))
+    private Set<Treatment> treatments;
+
     public Receptionist(){
 
         this.id= UUID.randomUUID().toString();
