@@ -22,8 +22,8 @@ public class Medicine {
     }
     @ManyToMany
     @JoinTable(name = "PatientsMedicines"
-    ,joinColumns = @JoinColumn(name = "MedicineId"),
-    inverseJoinColumns = @JoinColumn(name = "PatientId"))
+    ,joinColumns = @JoinColumn(name = "Medicine_Id"),
+    inverseJoinColumns = @JoinColumn(name = "Patient_Id"))
 private Set<Patient> patients;
 
 

@@ -12,7 +12,7 @@ public class Visit {
 @EmbeddedId
     private VisitId id;
 
-@Column(name = "VisitTime",columnDefinition = "datetime2(0)",nullable = false)
+@Column(name = "Visit_Time",columnDefinition = "datetime2(0)",nullable = false)
     private String visitTime;
 
     public String getVisitTime() {

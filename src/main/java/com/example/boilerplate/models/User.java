@@ -15,14 +15,14 @@ public class User {
     private String username;
     @Column(name = "Password",nullable = false)
     private String password;
-    @Column(name = "FirstName",columnDefinition ="nvarchar(100)",nullable = false)
+    @Column(name = "First_Name",columnDefinition ="nvarchar(100)",nullable = false)
     private String firstName;
-    @Column(name = "LastName",columnDefinition ="nvarchar(100)",nullable = false)
+    @Column(name = "Last_Name",columnDefinition ="nvarchar(100)",nullable = false)
     private String lastName;
-    @Column(name = "IsAdmin",columnDefinition ="bit",nullable = false)
-    private String isAdmin;
+    @Column(name = "Is_Admin",columnDefinition ="bit",nullable = false)
+    private boolean isAdmin;
     @ManyToOne(cascade = CascadeType.ALL)
-@JoinColumn(name = "HospitalId",columnDefinition ="varchar(36)",referencedColumnName = "Id")
+@JoinColumn(name = "Hospital_Id",columnDefinition ="varchar(36)",referencedColumnName = "Id")
     private Hospital hospital;
     public User(){
         this.id= UUID.randomUUID().toString();
@@ -64,11 +64,11 @@ public class User {
         this.lastName = lastName;
     }
 
-    public String getIsAdmin() {
+    public Boolean getIsAdmin() {
         return isAdmin;
     }
 
-    public void setIsAdmin(String isAdmin) {
+    public void setIsAdmin(Boolean isAdmin) {
         this.isAdmin = isAdmin;
     }
 

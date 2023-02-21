@@ -14,10 +14,10 @@ public class DischargeSummary {
     private String name;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "DoctorId",columnDefinition = "varchar(36)",referencedColumnName = "Id",unique = true)
+    @JoinColumn(name = "Doctor_Id",columnDefinition = "varchar(36)",referencedColumnName = "Id",unique = true)
     private Doctor doctor;
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "PatientId",columnDefinition = "varchar(36)",referencedColumnName = "Id",unique = true)
+    @JoinColumn(name = "Patient_Id",columnDefinition = "varchar(36)",referencedColumnName = "Id",unique = true)
     private Patient patient;
 
     public DischargeSummary() {

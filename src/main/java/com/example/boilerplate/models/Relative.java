@@ -8,13 +8,15 @@ import java.util.UUID;
 @Table(name = "Relatives")
 public class Relative {
     @Id
-    @Column(name = "UserId",columnDefinition = "varchar(36)",nullable = false)
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "UserId")
-    private User id;
+    @Column(name = "User_Id",columnDefinition = "varchar(36)",nullable = false)
+private String id;
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "AddressId",columnDefinition = "varchar(36)",referencedColumnName ="Id")
+    @JoinColumn(name = "Address_Id",columnDefinition = "varchar(36)",referencedColumnName ="Id")
     private Address address;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private User user;
 
     public Relative() {
     }

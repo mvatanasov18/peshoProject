@@ -13,7 +13,7 @@ public class Doctor {
     @Column(name = "Specialization",nullable = false,columnDefinition = "nvarchar(70)")
     private String specialization;
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "UserId",unique = true,columnDefinition ="varchar(36)",referencedColumnName ="Id")
+    @JoinColumn(name = "User_Id",unique = true,columnDefinition ="varchar(36)",referencedColumnName ="Id")
     private User User;
 
     public Doctor(){

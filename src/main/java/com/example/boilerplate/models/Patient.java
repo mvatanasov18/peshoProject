@@ -11,20 +11,20 @@ public class Patient {
     @Id
     @Column(name = "Id",columnDefinition = "varchar(36)",nullable = false)
     private String id;
-    @Column(name = "DateOfBirth",columnDefinition = "date",nullable = false)
+    @Column(name = "Date_Of_Birth",columnDefinition = "date",nullable = false)
     private String date;
     @Column(name = "Condition",columnDefinition = "nvarchar(36)",nullable = false)
     private String condition;
-    @Column(name = "SurgeryRequired",columnDefinition = "bit",nullable = false)
+    @Column(name = "Surgery_Required",columnDefinition = "bit",nullable = false)
     private String surgeryRequired;
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "UserId",columnDefinition = "varchar(36)", unique = true, referencedColumnName = "Id")
+    @JoinColumn(name = "User_Id",columnDefinition = "varchar(36)", unique = true, referencedColumnName = "Id")
     private User user;
 
     @ManyToMany
     @JoinTable(name = "PatientsMedicines"
-            ,joinColumns = @JoinColumn(name = "PatientId"),
-            inverseJoinColumns = @JoinColumn(name = "MedicineId"))
+            ,joinColumns = @JoinColumn(name = "Patient_Id"),
+            inverseJoinColumns = @JoinColumn(name = "Medicine_Id"))
     private Set<Medicine> medicines;
 
     public Patient() {

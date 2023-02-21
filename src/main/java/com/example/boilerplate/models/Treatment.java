@@ -18,13 +18,13 @@ public class Treatment {
     @Column(name = "Description",columnDefinition = "nvarchar(MAX)",nullable = false)
     private String description;
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "PatientId",columnDefinition = "varchar(36)",referencedColumnName = "Id")
+    @JoinColumn(name = "Patient_Id",columnDefinition = "varchar(36)",referencedColumnName = "Id")
     private Patient patient;
 
     @ManyToMany
     @JoinTable(name = "ReceptionistsTreatments"
-            ,joinColumns = @JoinColumn(name = "TreatmentId"),
-            inverseJoinColumns = @JoinColumn(name = "ReceptionistId"))
+            ,joinColumns = @JoinColumn(name = "Treatment_Id"),
+            inverseJoinColumns = @JoinColumn(name = "Receptionist_Id"))
     private Set<Receptionist> receptionists;
 
     public Treatment() {
