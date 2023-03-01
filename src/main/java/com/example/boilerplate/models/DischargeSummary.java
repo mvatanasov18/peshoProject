@@ -1,17 +1,23 @@
 package com.example.boilerplate.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.UUID;
 
+@ToString
+@EqualsAndHashCode
+@AllArgsConstructor
 @Entity
 @Table(name = "DischargeSummaries")
 public class DischargeSummary {
     @Id
     @Column(name = "Id",columnDefinition = "varchar(36)",nullable = false)
     private String id;
-    @Column(name = "File",columnDefinition = "varchar(MAX)",nullable = false)
-    private String name;
+    @Column(name = "File",columnDefinition = "varbinary(MAX)",nullable = false)
+    private byte[] file;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "Doctor_Id",columnDefinition = "varchar(36)",referencedColumnName = "Id",unique = true)
@@ -28,12 +34,12 @@ public class DischargeSummary {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public byte[] getFile() {
+        return file;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFile(byte[] temp) {
+        this.file = temp;
     }
 
     public Doctor getDoctor() {

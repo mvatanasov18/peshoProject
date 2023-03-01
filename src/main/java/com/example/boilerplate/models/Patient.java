@@ -1,10 +1,13 @@
 package com.example.boilerplate.models;
 
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.Set;
 import java.util.UUID;
-
+@ToString
+@EqualsAndHashCode
 @Entity
 @Table(name = "Patients")
 public class Patient {
@@ -12,11 +15,11 @@ public class Patient {
     @Column(name = "Id",columnDefinition = "varchar(36)",nullable = false)
     private String id;
     @Column(name = "Date_Of_Birth",columnDefinition = "date",nullable = false)
-    private String date;
+    private String dateOfBirth;
     @Column(name = "Condition",columnDefinition = "nvarchar(36)",nullable = false)
     private String condition;
     @Column(name = "Surgery_Required",columnDefinition = "bit",nullable = false)
-    private String surgeryRequired;
+    private Boolean surgeryRequired;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "User_Id",columnDefinition = "varchar(36)", unique = true, referencedColumnName = "Id")
     private User user;
@@ -35,12 +38,12 @@ public class Patient {
         return id;
     }
 
-    public String getDate() {
-        return date;
+    public String getDateOfBirth() {
+        return dateOfBirth;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setDateOfBirth(String date) {
+        this.dateOfBirth = date;
     }
 
     public String getCondition() {
@@ -51,11 +54,11 @@ public class Patient {
         this.condition = condition;
     }
 
-    public String getSurgeryRequired() {
+    public Boolean getSurgeryRequired() {
         return surgeryRequired;
     }
 
-    public void setSurgeryRequired(String surgeryRequired) {
+    public void setSurgeryRequired(Boolean surgeryRequired) {
         this.surgeryRequired = surgeryRequired;
     }
 

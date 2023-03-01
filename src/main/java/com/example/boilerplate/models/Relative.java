@@ -1,9 +1,14 @@
 package com.example.boilerplate.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.UUID;
-
+@ToString
+@EqualsAndHashCode
+@AllArgsConstructor
 @Entity
 @Table(name = "Relatives")
 public class Relative {

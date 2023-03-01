@@ -1,10 +1,15 @@
 package com.example.boilerplate.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.Set;
 import java.util.UUID;
-
+@ToString
+@EqualsAndHashCode
+@AllArgsConstructor
 @Entity
 @Table(name = "Medicines")
 public class Medicine {

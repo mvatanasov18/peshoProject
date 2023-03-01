@@ -1,8 +1,14 @@
 package com.example.boilerplate.models;
 
+import com.example.boilerplate.services.UserService;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.UUID;
+@ToString
+@EqualsAndHashCode
 
 @Entity
 @Table(name = "Users")
@@ -28,6 +34,16 @@ public class User {
         this.id= UUID.randomUUID().toString();
     }
 
+    public User(String id, String username, String password, String firstName, String lastName, boolean isAdmin, Hospital hospital) {
+        this.id = id;
+        this.username = username;
+        setPassword(password);
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.isAdmin = isAdmin;
+        this.hospital = hospital;
+    }
+
     public String getId() {
         return id;
     }
@@ -45,7 +61,7 @@ public class User {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = UserService.hashPassword(password);
     }
 
     public String getFirstName() {

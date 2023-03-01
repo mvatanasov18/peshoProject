@@ -1,178 +1,360 @@
-USE Hospital;
+USE [master]
 GO
-
-CREATE TABLE Addresses(
-                          Id varchar(36) PRIMARY KEY,
-                          Country nvarchar(100) NOT NULL,
-                          City nvarchar(100) NOT NULL,
-                          Street nvarchar(100) NOT NULL,
-                          Number int NOT NULL
-)
-CREATE TABLE Hospitals(
-                          Id varchar(36) PRIMARY KEY,
-    [Name] nvarchar(150) NOT NULL,
-    AddressId varchar(36) UNIQUE,
-    FOREIGN KEY(AddressId) REFERENCES Addresses(Id)
-    )
-CREATE TABLE Users(
-                      Id varchar(36) PRIMARY KEY,
-                      Username nvarchar(150) UNIQUE NOT NULL,
-    [Password] varbinary(MAX) NOT NULL,
-    FirstName nvarchar(100) NOT NULL,
-    LastName nvarchar(100) NOT NULL,
-    IsAdmin bit NOT NULL,
-    HospitalId varchar(36) NOT NULL,
-    FOREIGN KEY(HospitalId) REFERENCES Hospitals(Id)
-    )
-
-CREATE TABLE Relatives(
-                          UserId varchar(36),
-                          AddressId varchar(36),
-                          PRIMARY KEY(UserId),
-                          FOREIGN KEY(UserId) REFERENCES Users(Id),
-                          FOREIGN KEY(AddressId) REFERENCES Addresses(Id)
-)
-
-
-
-CREATE TABLE Doctors(
-                        Id varchar(36) PRIMARY KEY,
-                        Specialization nvarchar(70) NOT NULL,
-                        UserId varchar(36) UNIQUE,
-                        FOREIGN KEY (UserId) REFERENCES Users(Id),
-)
-
-CREATE TABLE Patients(
-                         Id varchar(36) PRIMARY KEY,
-                         DateOfBirth date NOT NULL,
-                         Condition nvarchar(255) NOT NULL,
-                         SurgeryRequired bit NOT NULL,
-                         UserId varchar(36) UNIQUE,
-                         FOREIGN KEY (UserId) REFERENCES Users(Id),
-)
-CREATE TABLE Medicines(
-                          Id varchar(36) PRIMARY KEY,
-    [Name] NVARCHAR(70) NOT NULL,
-    Quantity int NOT NULL,
-    [Description] nvarchar(MAX) NOT NULL
-)
-CREATE TABLE PatientsMedicines(
-                                  PatientId varchar(36),
-                                  MedicineId varchar(36),
-                                  PRIMARY KEY(PatientId,MedicineId),
-                                  FOREIGN KEY(PatientId) REFERENCES Patients(Id),
-                                  FOREIGN KEy(MedicineId) REFERENCES Medicines(Id)
-)
-
-CREATE TABLE Receptionists(
-                              Id varchar(36) PRIMARY KEY,
-                              UserId varchar(36) UNIQUE,
-                              FOREIGN KEY (UserId) REFERENCES Users(Id)
-)
-CREATE TABLE Treatments(
-                           Id varchar(36) PRIMARY KEY,
-    [Name] nvarchar(255) NOT NULL,
-    [Time] datetime2(0) NOT NULL,
-    [Description] nvarchar(MAX) NOT NULL,
-    PatientId varchar(36),
-    FOREIGN KEY (PatientId) REFERENCES Patients(Id)
-    )
-CREATE TABLE ReceptionistsTreatments(
-                                        ReceptionistsId varchar(36),
-                                        TreatmentId varchar(36),
-                                        PRIMARY KEY(ReceptionistsId,TreatmentId),
-                                        FOREIGN KEY(ReceptionistsId) REFERENCES Receptionists(Id),
-                                        FOREIGN KEY(TreatmentId) REFERENCES Treatments(Id)
-)
-
-CREATE TABLE DischargeSummaries(
-                                   Id varchar(36) PRIMARY KEY,
-    [File] varbinary(MAX) NOT NULL,
-    DoctorId varchar(36),
-    PatientId varchar(36),
-    FOREIGN KEY(DoctorId) REFERENCES Doctors(Id),
-    FOREIGN KEY(PatientId) REFERENCES Patients(Id),
-    )
-CREATE TABLE Visits(
-                       PatientId varchar(36),
-                       RelativeId varchar(36),
-                       VisitTime datetime2(0) NOT NULL,
-                       PRIMARY KEY(PatientId,RelativeId),
-                       FOREIGN KEY(PatientID) REFERENCES Patients(Id),
-                       FOREIGN KEY(RelativeId) REFERENCES Relatives(UserId)
-)
-/****** Object:  StoredProcedure [dbo].[CheckPass]    Script Date: 2/8/2023 9:32:00 AM ******/
+/****** Object:  Database [Hospital]    Script Date: 2/23/2023 2:43:36 PM ******/
+CREATE DATABASE [Hospital]
+ CONTAINMENT = NONE
+ ON  PRIMARY
+( NAME = N'Hospital', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.SQLEXPRESS\MSSQL\DATA\Hospital.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON
+( NAME = N'Hospital_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.SQLEXPRESS\MSSQL\DATA\Hospital_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT
+GO
+ALTER DATABASE [Hospital] SET COMPATIBILITY_LEVEL = 150
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [Hospital].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [Hospital] SET ANSI_NULL_DEFAULT OFF
+GO
+ALTER DATABASE [Hospital] SET ANSI_NULLS OFF
+GO
+ALTER DATABASE [Hospital] SET ANSI_PADDING OFF
+GO
+ALTER DATABASE [Hospital] SET ANSI_WARNINGS OFF
+GO
+ALTER DATABASE [Hospital] SET ARITHABORT OFF
+GO
+ALTER DATABASE [Hospital] SET AUTO_CLOSE OFF
+GO
+ALTER DATABASE [Hospital] SET AUTO_SHRINK OFF
+GO
+ALTER DATABASE [Hospital] SET AUTO_UPDATE_STATISTICS ON
+GO
+ALTER DATABASE [Hospital] SET CURSOR_CLOSE_ON_COMMIT OFF
+GO
+ALTER DATABASE [Hospital] SET CURSOR_DEFAULT  GLOBAL
+GO
+ALTER DATABASE [Hospital] SET CONCAT_NULL_YIELDS_NULL OFF
+GO
+ALTER DATABASE [Hospital] SET NUMERIC_ROUNDABORT OFF
+GO
+ALTER DATABASE [Hospital] SET QUOTED_IDENTIFIER OFF
+GO
+ALTER DATABASE [Hospital] SET RECURSIVE_TRIGGERS OFF
+GO
+ALTER DATABASE [Hospital] SET  DISABLE_BROKER
+GO
+ALTER DATABASE [Hospital] SET AUTO_UPDATE_STATISTICS_ASYNC OFF
+GO
+ALTER DATABASE [Hospital] SET DATE_CORRELATION_OPTIMIZATION OFF
+GO
+ALTER DATABASE [Hospital] SET TRUSTWORTHY OFF
+GO
+ALTER DATABASE [Hospital] SET ALLOW_SNAPSHOT_ISOLATION OFF
+GO
+ALTER DATABASE [Hospital] SET PARAMETERIZATION SIMPLE
+GO
+ALTER DATABASE [Hospital] SET READ_COMMITTED_SNAPSHOT OFF
+GO
+ALTER DATABASE [Hospital] SET HONOR_BROKER_PRIORITY OFF
+GO
+ALTER DATABASE [Hospital] SET RECOVERY SIMPLE
+GO
+ALTER DATABASE [Hospital] SET  MULTI_USER
+GO
+ALTER DATABASE [Hospital] SET PAGE_VERIFY CHECKSUM
+GO
+ALTER DATABASE [Hospital] SET DB_CHAINING OFF
+GO
+ALTER DATABASE [Hospital] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF )
+GO
+ALTER DATABASE [Hospital] SET TARGET_RECOVERY_TIME = 60 SECONDS
+GO
+ALTER DATABASE [Hospital] SET DELAYED_DURABILITY = DISABLED
+GO
+ALTER DATABASE [Hospital] SET ACCELERATED_DATABASE_RECOVERY = OFF
+GO
+ALTER DATABASE [Hospital] SET QUERY_STORE = OFF
+GO
+USE [Hospital]
+GO
+/****** Object:  Table [dbo].[Addresses]    Script Date: 2/23/2023 2:43:36 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Addresses](
+    [Id] [varchar](36) NOT NULL,
+    [Country] [nvarchar](100) NOT NULL,
+    [City] [nvarchar](100) NOT NULL,
+    [Street] [nvarchar](100) NOT NULL,
+    [Number] [int] NOT NULL,
+    PRIMARY KEY CLUSTERED
+(
+[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+    ) ON [PRIMARY]
+    GO
+/****** Object:  Table [dbo].[Discharge_Summaries]    Script Date: 2/23/2023 2:43:36 PM ******/
     SET ANSI_NULLS ON
     GO
     SET QUOTED_IDENTIFIER ON
     GO
-
-CREATE   PROCEDURE [dbo].[CheckPass]
-@Username varchar(100),
-@Password varchar(MAX)
-AS
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for procedure here
-SELECT IIF(HASHBYTES('SHA2_512', CONVERT(varbinary(MAX),  @Password))= [Password],1,0) FROM Users
-WHERE Username=@Username;
-END
-GO
-/****** Object:  StoredProcedure [dbo].[InsertUser]    Script Date: 2/8/2023 9:32:00 AM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
--- =============================================
-
-CREATE PROCEDURE [dbo].[InsertUser]
-	@Username varchar(100),
-	@Password varchar(MAX),
-	@FirstName nvarchar(100),
-	@LastName nvarchar(100),
-	@IsAdmin bit,
-	@HospitalId varchar(36)
-AS
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-INSERT INTO Users(Username,[Password],FirstName,LastName,
-                  IsAdmin,HospitalId)
-VALUES (@Username,CONVERT(varbinary(MAX),@Password),
-        @FirstName,@LastName,@IsAdmin,@HospitalId)
-END
-GO
-USE [master]
-GO
+CREATE TABLE [dbo].[Discharge_Summaries](
+    [Id] [varchar](36) NOT NULL,
+    [File] [varbinary](max) NOT NULL,
+    [Doctor_Id] [varchar](36) NULL,
+    [Patient_Id] [varchar](36) NULL,
+    PRIMARY KEY CLUSTERED
+(
+[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+    ) ON [PRIMARY]
+    GO
+/****** Object:  Table [dbo].[Doctors]    Script Date: 2/23/2023 2:43:36 PM ******/
+    SET ANSI_NULLS ON
+    GO
+    SET QUOTED_IDENTIFIER ON
+    GO
+CREATE TABLE [dbo].[Doctors](
+    [Id] [varchar](36) NOT NULL,
+    [Specialization] [nvarchar](70) NOT NULL,
+    [User_Id] [varchar](36) NULL,
+    PRIMARY KEY CLUSTERED
+(
+[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+    UNIQUE NONCLUSTERED
+(
+[User_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+    ) ON [PRIMARY]
+    GO
+/****** Object:  Table [dbo].[Hospitals]    Script Date: 2/23/2023 2:43:36 PM ******/
+    SET ANSI_NULLS ON
+    GO
+    SET QUOTED_IDENTIFIER ON
+    GO
+CREATE TABLE [dbo].[Hospitals](
+    [Id] [varchar](36) NOT NULL,
+    [Name] [nvarchar](150) NOT NULL,
+    [Address_Id] [varchar](36) NULL,
+    PRIMARY KEY CLUSTERED
+(
+[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+    UNIQUE NONCLUSTERED
+(
+[Address_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+    ) ON [PRIMARY]
+    GO
+/****** Object:  Table [dbo].[Medicines]    Script Date: 2/23/2023 2:43:36 PM ******/
+    SET ANSI_NULLS ON
+    GO
+    SET QUOTED_IDENTIFIER ON
+    GO
+CREATE TABLE [dbo].[Medicines](
+    [Id] [varchar](36) NOT NULL,
+    [Name] [nvarchar](70) NOT NULL,
+    [Quantity] [int] NOT NULL,
+    [Description] [nvarchar](max) NOT NULL,
+    PRIMARY KEY CLUSTERED
+(
+[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+    ) ON [PRIMARY]
+    GO
+/****** Object:  Table [dbo].[Patients]    Script Date: 2/23/2023 2:43:36 PM ******/
+    SET ANSI_NULLS ON
+    GO
+    SET QUOTED_IDENTIFIER ON
+    GO
+CREATE TABLE [dbo].[Patients](
+    [Id] [varchar](36) NOT NULL,
+    [Date_Of_Birth] [date] NOT NULL,
+    [Condition] [nvarchar](255) NOT NULL,
+    [Surgery_Required] [bit] NOT NULL,
+    [User_Id] [varchar](36) NULL,
+    PRIMARY KEY CLUSTERED
+(
+[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+    UNIQUE NONCLUSTERED
+(
+[User_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+    ) ON [PRIMARY]
+    GO
+/****** Object:  Table [dbo].[Patients_Medicines]    Script Date: 2/23/2023 2:43:36 PM ******/
+    SET ANSI_NULLS ON
+    GO
+    SET QUOTED_IDENTIFIER ON
+    GO
+CREATE TABLE [dbo].[Patients_Medicines](
+    [Patient_Id] [varchar](36) NOT NULL,
+    [Medicine_Id] [varchar](36) NOT NULL,
+    PRIMARY KEY CLUSTERED
+(
+    [Patient_Id] ASC,
+[Medicine_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+    ) ON [PRIMARY]
+    GO
+/****** Object:  Table [dbo].[Receptionists]    Script Date: 2/23/2023 2:43:36 PM ******/
+    SET ANSI_NULLS ON
+    GO
+    SET QUOTED_IDENTIFIER ON
+    GO
+CREATE TABLE [dbo].[Receptionists](
+    [Id] [varchar](36) NOT NULL,
+    [User_Id] [varchar](36) NULL,
+    PRIMARY KEY CLUSTERED
+(
+[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+    UNIQUE NONCLUSTERED
+(
+[User_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+    ) ON [PRIMARY]
+    GO
+/****** Object:  Table [dbo].[Receptionists_Treatments]    Script Date: 2/23/2023 2:43:36 PM ******/
+    SET ANSI_NULLS ON
+    GO
+    SET QUOTED_IDENTIFIER ON
+    GO
+CREATE TABLE [dbo].[Receptionists_Treatments](
+    [Receptionist_Id] [varchar](36) NOT NULL,
+    [Treatment_Id] [varchar](36) NOT NULL,
+    PRIMARY KEY CLUSTERED
+(
+    [Receptionist_Id] ASC,
+[Treatment_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+    ) ON [PRIMARY]
+    GO
+/****** Object:  Table [dbo].[Relatives]    Script Date: 2/23/2023 2:43:36 PM ******/
+    SET ANSI_NULLS ON
+    GO
+    SET QUOTED_IDENTIFIER ON
+    GO
+CREATE TABLE [dbo].[Relatives](
+    [User_Id] [varchar](36) NOT NULL,
+    [Address_Id] [varchar](36) NULL,
+    PRIMARY KEY CLUSTERED
+(
+[User_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+    ) ON [PRIMARY]
+    GO
+/****** Object:  Table [dbo].[Treatments]    Script Date: 2/23/2023 2:43:36 PM ******/
+    SET ANSI_NULLS ON
+    GO
+    SET QUOTED_IDENTIFIER ON
+    GO
+CREATE TABLE [dbo].[Treatments](
+    [Id] [varchar](36) NOT NULL,
+    [Name] [nvarchar](255) NOT NULL,
+    [Time] [datetime2](0) NOT NULL,
+    [Description] [nvarchar](max) NOT NULL,
+    [Patient_Id] [varchar](36) NULL,
+    PRIMARY KEY CLUSTERED
+(
+[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+    ) ON [PRIMARY]
+    GO
+/****** Object:  Table [dbo].[Users]    Script Date: 2/23/2023 2:43:36 PM ******/
+    SET ANSI_NULLS ON
+    GO
+    SET QUOTED_IDENTIFIER ON
+    GO
+CREATE TABLE [dbo].[Users](
+    [Id] [varchar](36) NOT NULL,
+    [Username] [nvarchar](150) NOT NULL,
+    [Password] [varchar](600) NOT NULL,
+    [First_Name] [nvarchar](100) NOT NULL,
+    [Last_Name] [nvarchar](100) NOT NULL,
+    [Is_Admin] [bit] NOT NULL,
+    [Hospital_Id] [varchar](36) NOT NULL,
+    PRIMARY KEY CLUSTERED
+(
+[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+    UNIQUE NONCLUSTERED
+(
+[Username] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+    ) ON [PRIMARY]
+    GO
+/****** Object:  Table [dbo].[Visits]    Script Date: 2/23/2023 2:43:36 PM ******/
+    SET ANSI_NULLS ON
+    GO
+    SET QUOTED_IDENTIFIER ON
+    GO
+CREATE TABLE [dbo].[Visits](
+    [Patient_Id] [varchar](36) NOT NULL,
+    [Relative_Id] [varchar](36) NOT NULL,
+    [Visit_Time] [datetime2](0) NOT NULL,
+    PRIMARY KEY CLUSTERED
+(
+    [Patient_Id] ASC,
+[Relative_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+    ) ON [PRIMARY]
+    GO
+ALTER TABLE [dbo].[Discharge_Summaries]  WITH CHECK ADD FOREIGN KEY([Doctor_Id])
+    REFERENCES [dbo].[Doctors] ([Id])
+    GO
+ALTER TABLE [dbo].[Discharge_Summaries]  WITH CHECK ADD FOREIGN KEY([Patient_Id])
+    REFERENCES [dbo].[Patients] ([Id])
+    GO
+ALTER TABLE [dbo].[Doctors]  WITH CHECK ADD FOREIGN KEY([User_Id])
+    REFERENCES [dbo].[Users] ([Id])
+    GO
+ALTER TABLE [dbo].[Hospitals]  WITH CHECK ADD FOREIGN KEY([Address_Id])
+    REFERENCES [dbo].[Addresses] ([Id])
+    GO
+ALTER TABLE [dbo].[Patients]  WITH CHECK ADD FOREIGN KEY([User_Id])
+    REFERENCES [dbo].[Users] ([Id])
+    GO
+ALTER TABLE [dbo].[Patients_Medicines]  WITH CHECK ADD FOREIGN KEY([Medicine_Id])
+    REFERENCES [dbo].[Medicines] ([Id])
+    GO
+ALTER TABLE [dbo].[Patients_Medicines]  WITH CHECK ADD FOREIGN KEY([Patient_Id])
+    REFERENCES [dbo].[Patients] ([Id])
+    GO
+ALTER TABLE [dbo].[Receptionists]  WITH CHECK ADD FOREIGN KEY([User_Id])
+    REFERENCES [dbo].[Users] ([Id])
+    GO
+ALTER TABLE [dbo].[Receptionists_Treatments]  WITH CHECK ADD FOREIGN KEY([Receptionist_Id])
+    REFERENCES [dbo].[Receptionists] ([Id])
+    GO
+ALTER TABLE [dbo].[Receptionists_Treatments]  WITH CHECK ADD FOREIGN KEY([Treatment_Id])
+    REFERENCES [dbo].[Treatments] ([Id])
+    GO
+ALTER TABLE [dbo].[Relatives]  WITH CHECK ADD FOREIGN KEY([Address_Id])
+    REFERENCES [dbo].[Addresses] ([Id])
+    GO
+ALTER TABLE [dbo].[Relatives]  WITH CHECK ADD FOREIGN KEY([User_Id])
+    REFERENCES [dbo].[Users] ([Id])
+    GO
+ALTER TABLE [dbo].[Treatments]  WITH CHECK ADD FOREIGN KEY([Patient_Id])
+    REFERENCES [dbo].[Patients] ([Id])
+    GO
+ALTER TABLE [dbo].[Users]  WITH CHECK ADD FOREIGN KEY([Hospital_Id])
+    REFERENCES [dbo].[Hospitals] ([Id])
+    GO
+ALTER TABLE [dbo].[Visits]  WITH CHECK ADD FOREIGN KEY([Patient_Id])
+    REFERENCES [dbo].[Patients] ([Id])
+    GO
+ALTER TABLE [dbo].[Visits]  WITH CHECK ADD FOREIGN KEY([Relative_Id])
+    REFERENCES [dbo].[Relatives] ([User_Id])
+    GO
+    USE [master]
+    GO
 ALTER DATABASE [Hospital] SET  READ_WRITE
-GO
-
-
-USE Hospital;
-
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE OR ALTER TRIGGER HashPassword ON Users
-   INSTEAD OF INSERT
-AS
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-INSERT INTO Users(Username,[Password],FirstName,LastName,
-                  IsAdmin,HospitalId)
-SELECT i.Username,HASHBYTES('SHA2_512',i.[Password]),
-       i.FirstName,i.LastName,i.IsAdmin,i.HospitalId
-FROM inserted as i
-
-END
 GO
