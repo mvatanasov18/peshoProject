@@ -4,8 +4,7 @@ import com.example.boilerplate.BoilerplateApplication;
 import com.example.boilerplate.models.Address;
 import com.example.boilerplate.models.Hospital;
 import com.example.boilerplate.models.User;
-import com.example.boilerplate.services.UserService;
-import jakarta.persistence.Table;
+import com.example.boilerplate.services.PasswordHasher;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +49,7 @@ public class UserRepositoryTest {
         Optional<User> temp = userRepository.findById(user.getId());
         assertTrue(temp.isPresent());
         assertEquals(temp.get().getId(), user.getId());
-        assertEquals(temp.get().getPassword(), UserService.hashPassword("strong password"));
+        assertEquals(temp.get().getPassword(), PasswordHasher.hashPassword("strong password"));
         userRepository.delete(user);
         hospitalRepository.delete(hospital);
         addressRepository.delete(address);

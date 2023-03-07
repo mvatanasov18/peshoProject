@@ -1,8 +1,7 @@
 package com.example.boilerplate.models;
 
-import com.example.boilerplate.services.UserService;
+import com.example.boilerplate.services.PasswordHasher;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -61,7 +60,7 @@ public class User {
     }
 
     public void setPassword(String password) {
-        this.password = UserService.hashPassword(password);
+        this.password = PasswordHasher.hashPassword(password);
     }
 
     public String getFirstName() {
