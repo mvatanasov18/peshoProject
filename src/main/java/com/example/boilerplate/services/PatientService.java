@@ -4,14 +4,14 @@ import com.example.boilerplate.models.Hospital;
 import com.example.boilerplate.models.Patient;
 import com.example.boilerplate.repositories.HospitalRepository;
 import com.example.boilerplate.repositories.PatientRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class PatientService {
     private final PatientRepository patientRepository;
-    public PatientService(PatientRepository patientRepository){
-        this.patientRepository=patientRepository;
-    }
+
     public Patient savePatient(Patient patient){
         return patientRepository.save(patient);
     }

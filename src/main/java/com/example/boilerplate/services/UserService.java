@@ -5,14 +5,14 @@ import com.example.boilerplate.models.User;
 import com.example.boilerplate.repositories.HospitalRepository;
 import com.example.boilerplate.repositories.TreatmentRepository;
 import com.example.boilerplate.repositories.UserRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    public UserService(UserRepository userRepository){
-        this.userRepository=userRepository;
-    }
+
     public User saveUser(User user){
         return userRepository.save(user);
     }
@@ -24,5 +24,11 @@ public class UserService {
     }
     public Iterable<User> findAll(){
         return userRepository.findAll();
+    }
+    public User findUserByUsername(String username){
+        return userRepository.findByUsername(username);
+    }
+    public boolean checkPassword(User user, String providedPassword){
+        return user.getPassword().equals(providedPassword);
     }
 }

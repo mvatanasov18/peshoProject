@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.util.UUID;
+
 @ToString
 @EqualsAndHashCode
 
@@ -13,24 +14,27 @@ import java.util.UUID;
 @Table(name = "Users")
 public class User {
     @Id
-    @Column(name = "Id",nullable = false, columnDefinition = "varchar(36)")
+    @Column(name = "Id", nullable = false, columnDefinition = "varchar(36)")
     private String id;
 
-    @Column(name = "Username",nullable = false,unique = true,columnDefinition = "varchar(100)")
+    @Column(name = "Username", nullable = false, unique = true, columnDefinition = "varchar(100)")
     private String username;
-    @Column(name = "Password",nullable = false)
+    @Column(name = "Password", nullable = false)
     private String password;
-    @Column(name = "First_Name",columnDefinition ="nvarchar(100)",nullable = false)
+    @Column(name = "First_Name", columnDefinition = "nvarchar(100)", nullable = false)
     private String firstName;
-    @Column(name = "Last_Name",columnDefinition ="nvarchar(100)",nullable = false)
+    @Column(name = "Last_Name", columnDefinition = "nvarchar(100)", nullable = false)
     private String lastName;
-    @Column(name = "Is_Admin",columnDefinition ="bit",nullable = false)
+    @Column(name = "Is_Admin", columnDefinition = "bit", nullable = false)
     private boolean isAdmin;
     @ManyToOne(cascade = CascadeType.ALL)
-@JoinColumn(name = "Hospital_Id",columnDefinition ="varchar(36)",referencedColumnName = "Id")
+    @JoinColumn(name = "Hospital_Id", columnDefinition = "varchar(36)", referencedColumnName = "Id")
     private Hospital hospital;
-    public User(){
-        this.id= UUID.randomUUID().toString();
+    @OneToOne(mappedBy = "user")
+    private Session session;
+
+    public User() {
+        this.id = UUID.randomUUID().toString();
     }
 
     public User(String id, String username, String password, String firstName, String lastName, boolean isAdmin, Hospital hospital) {
@@ -41,6 +45,22 @@ public class User {
         this.lastName = lastName;
         this.isAdmin = isAdmin;
         this.hospital = hospital;
+    }
+
+    public Session getSession() {
+        return session;
+    }
+
+    public void setSession(Session session) {
+        this.session = session;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
     }
 
     public String getId() {

@@ -4,16 +4,16 @@ import com.example.boilerplate.models.Address;
 import com.example.boilerplate.models.Hospital;
 import com.example.boilerplate.repositories.AddressRepository;
 import com.example.boilerplate.repositories.HospitalRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class HospitalService {
     private final HospitalRepository hospitalRepository;
-    public HospitalService(HospitalRepository hospitalRepository){
-        this.hospitalRepository=hospitalRepository;
-    }
+
     public Hospital saveHospital(Hospital hospital){
         return hospitalRepository.save(hospital);
     }

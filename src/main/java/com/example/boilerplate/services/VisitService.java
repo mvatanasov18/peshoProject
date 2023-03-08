@@ -5,14 +5,14 @@ import com.example.boilerplate.models.Visit;
 import com.example.boilerplate.models.id.VisitId;
 import com.example.boilerplate.repositories.HospitalRepository;
 import com.example.boilerplate.repositories.VisitRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class VisitService {
     private final VisitRepository visitRepository;
-    public VisitService(VisitRepository visitRepository){
-        this.visitRepository=visitRepository;
-    }
+
     public Visit saveVisit(Visit visit){
         return visitRepository.save(visit);
     }
