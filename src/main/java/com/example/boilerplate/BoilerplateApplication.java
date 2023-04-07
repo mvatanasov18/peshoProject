@@ -9,7 +9,7 @@ public class BoilerplateApplication {
     public static void main(String[] args) {
 
         SpringApplication.run(BoilerplateApplication.class, args);
-        System.out.println("http://localhost:8080/h2-console/");
+        System.out.println("http://localhost:8080/");
     }
 
 }

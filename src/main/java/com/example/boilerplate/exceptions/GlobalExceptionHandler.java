@@ -15,5 +15,10 @@ public class GlobalExceptionHandler {
     public ModelAndView handleUsernameAlreadyTakenException(UsernameAlreadyTakenException exception){
         return new ModelAndView("custom-error").addObject("message","Username already taken");
     }
-
+@ExceptionHandler(InvalidCredentialsException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ModelAndView handleInvalidCredentialsException(InvalidCredentialsException exception){
+        return new ModelAndView("custom-error").addObject("message","Invalid credentials");
+}
 }

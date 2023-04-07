@@ -7,6 +7,10 @@ import com.example.boilerplate.repositories.PatientRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Service
 @AllArgsConstructor
 public class PatientService {
@@ -21,7 +25,21 @@ public class PatientService {
     public Patient findById(String id){
         return patientRepository.findById(id).orElse(null);
     }
-    public Iterable<Patient> findAll(){
+    public List<Patient> findAll(){
         return patientRepository.findAll();
+    }
+    public void deleteById(String id){
+        patientRepository.deleteById(id);
+    }
+    public List<Patient> findAllByHospitalId(String id){return patientRepository.findAllByHospitalId(id);}
+    public boolean checkPatientByIdAndHospitalId(String id, String hospitalId) {
+        List<Patient> patients = findAllByHospitalId(hospitalId);
+        Map<String, Patient> hashPatient = new HashMap<>();
+
+        for (Patient patient : patients) {
+            hashPatient.put(patient.getId(), patient);
+        }
+
+        return hashPatient.containsKey(id);
     }
 }

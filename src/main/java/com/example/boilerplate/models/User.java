@@ -21,26 +21,36 @@ public class User {
     private String username;
     @Column(name = "Password", nullable = false)
     private String password;
-    @Column(name = "First_Name", columnDefinition = "nvarchar(100)", nullable = false)
+    @Column(name = "FirstName", columnDefinition = "nvarchar(100)", nullable = false)
     private String firstName;
-    @Column(name = "Last_Name", columnDefinition = "nvarchar(100)", nullable = false)
+    @Column(name = "LastName", columnDefinition = "nvarchar(100)", nullable = false)
     private String lastName;
-    @Column(name = "Is_Admin", columnDefinition = "bit", nullable = false)
+    @Column(name = "IsAdmin", columnDefinition = "bit", nullable = false)
     private boolean isAdmin;
+
+    @Column(name = "salt")
+    private byte[] salt;
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "Hospital_Id", columnDefinition = "varchar(36)", referencedColumnName = "Id")
+    @JoinColumn(name = "HospitalId", columnDefinition = "varchar(36)", referencedColumnName = "Id")
     private Hospital hospital;
     @OneToOne(mappedBy = "user")
     private Session session;
 
     public User() {
         this.id = UUID.randomUUID().toString();
+        this.username="";
+        this.password="";
+        this.firstName="";
+        this.lastName="";
+        this.isAdmin=false;
+        this.hospital=new Hospital();
+        this.session=new Session();
     }
 
     public User(String id, String username, String password, String firstName, String lastName, boolean isAdmin, Hospital hospital) {
         this.id = id;
         this.username = username;
-        setPassword(password);
+        this.password=password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.isAdmin = isAdmin;
@@ -80,7 +90,16 @@ public class User {
     }
 
     public void setPassword(String password) {
-        this.password = PasswordHasher.hashPassword(password);
+        this.password = password;
+
+    }
+    public void hashPassword(){
+        PasswordHasher passwordHasher= new PasswordHasher();
+        if(this.salt!=null){
+            passwordHasher.setSalt(salt);
+        }
+        this.password=passwordHasher.hashPassword(password);
+        this.salt= passwordHasher.getSalt();
     }
 
     public String getFirstName() {

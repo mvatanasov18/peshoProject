@@ -12,7 +12,7 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class DoctorService {
-    private final DoctorRepository doctorRepository;
+    private  DoctorRepository doctorRepository;
 
     public Doctor saveDoctor(Doctor doctor){
         return doctorRepository.save(doctor);

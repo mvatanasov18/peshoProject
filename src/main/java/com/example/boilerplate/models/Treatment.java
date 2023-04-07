@@ -18,18 +18,18 @@ public class Treatment {
     private String id;
     @Column(name = "Name",columnDefinition = "nvarchar(255)",nullable = false)
     private String name;
-    @Column(name = "Time",columnDefinition = "datetime2(0)",nullable = false)
+    @Column(name = "DateOfTreatment",columnDefinition = "datetime2(0)",nullable = false)
     private String time;
     @Column(name = "Description",columnDefinition = "nvarchar(MAX)",nullable = false)
     private String description;
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "Patient_Id",columnDefinition = "varchar(36)",referencedColumnName = "Id")
+    @JoinColumn(name = "PatientId",columnDefinition = "varchar(36)",referencedColumnName = "Id")
     private Patient patient;
 
     @ManyToMany
     @JoinTable(name = "ReceptionistsTreatments"
-            ,joinColumns = @JoinColumn(name = "Treatment_Id"),
-            inverseJoinColumns = @JoinColumn(name = "Receptionist_Id"))
+            ,joinColumns = @JoinColumn(name = "TreatmentId"),
+            inverseJoinColumns = @JoinColumn(name = "ReceptionistId"))
     private Set<Receptionist> receptionists;
 
     public Treatment() {

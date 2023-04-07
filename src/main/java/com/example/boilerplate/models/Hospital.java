@@ -18,7 +18,7 @@ public class Hospital {
     @Column(name = "Name",columnDefinition = "nvarchar(150)",nullable = false)
     private String name;
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "Address_Id",columnDefinition = "varchar(36)",referencedColumnName = "Id",unique = true)
+    @JoinColumn(name = "AddressId",columnDefinition = "varchar(36)",referencedColumnName = "Id",unique = true)
     private Address address;
 
     public Hospital() {

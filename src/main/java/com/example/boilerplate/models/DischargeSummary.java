@@ -20,10 +20,10 @@ public class DischargeSummary {
     private byte[] file;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "Doctor_Id",columnDefinition = "varchar(36)",referencedColumnName = "Id",unique = true)
+    @JoinColumn(name = "DoctorId",columnDefinition = "varchar(36)",referencedColumnName = "Id",unique = true)
     private Doctor doctor;
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "Patient_Id",columnDefinition = "varchar(36)",referencedColumnName = "Id",unique = true)
+    @JoinColumn(name = "PatientId",columnDefinition = "varchar(36)",referencedColumnName = "Id",unique = true)
     private Patient patient;
 
     public DischargeSummary() {

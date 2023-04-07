@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private final UserRepository userRepository;
 
+
+
     public User saveUser(User user){
         return userRepository.save(user);
     }
@@ -31,4 +33,8 @@ public class UserService {
     public boolean checkPassword(User user, String providedPassword){
         return user.getPassword().equals(providedPassword);
     }
+    public boolean checkUsername(User user){
+        return userRepository.existsByUsername(user.getUsername());
+    }
+
 }

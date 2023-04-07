@@ -21,6 +21,7 @@ public class SessionService {
     public Session findById(String id){
         return sessionRepository.findById(id).orElse(null);
     }
+    public void deleteById(String id){sessionRepository.deleteById(id);}
     public Iterable<Session> findAll(){
         return sessionRepository.findAll();
     }

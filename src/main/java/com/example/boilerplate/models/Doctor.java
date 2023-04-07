@@ -17,8 +17,8 @@ public class Doctor {
     private String id;
     @Column(name = "Specialization",nullable = false,columnDefinition = "nvarchar(70)")
     private String specialization;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "User_Id",unique = true,columnDefinition ="varchar(36)",referencedColumnName ="Id")
+    @OneToOne()
+    @JoinColumn(name = "UserId",referencedColumnName ="Id")
     private User User;
 
     public Doctor(){
@@ -38,11 +38,11 @@ public class Doctor {
         this.specialization = specialization;
     }
 
-    public com.example.boilerplate.models.User getUser() {
+    public User getUser() {
         return User;
     }
 
-    public void setUser(com.example.boilerplate.models.User user) {
+    public void setUser(User user) {
         User = user;
     }
 }

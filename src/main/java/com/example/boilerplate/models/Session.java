@@ -16,16 +16,16 @@ import java.util.UUID;
 @Table(name = "Sessions")
 public class Session {
     @Id
-    @Column(name = "session_id",nullable = false,columnDefinition = "varchar(36)")
+    @Column(name = "Id",nullable = false,columnDefinition = "varchar(36)")
     private String id;
 
-    @Column(name = "role_name",nullable = false,columnDefinition = "varchar(20)")
+    @Column(name = "RoleName",nullable = false,columnDefinition = "varchar(20)")
     private String roleName;
 
-    @Column(name = "time_created",nullable = false,columnDefinition = "datetime(0)")
+    @Column(name = "TimeCreated",nullable = false,columnDefinition = "datetime(0)")
     private Timestamp timeCreated;
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "UserId")
     private User user;
 
     public Session() {
@@ -50,11 +50,11 @@ public class Session {
         this.timeCreated = timeCreated;
     }
 
-    public User getUserId() {
+    public User getUser() {
         return user;
     }
 
-    public void setUserId(User userId) {
+    public void setUser(User userId) {
         this.user = userId;
     }
 }
