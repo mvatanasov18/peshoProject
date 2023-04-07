@@ -2,11 +2,15 @@ package com.example.boilerplate.services;
 
 import com.example.boilerplate.models.Address;
 import com.example.boilerplate.models.Doctor;
+import com.example.boilerplate.models.Patient;
 import com.example.boilerplate.repositories.AddressRepository;
 import com.example.boilerplate.repositories.DoctorRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -23,7 +27,19 @@ public class DoctorService {
     public Doctor findById(String id){
         return doctorRepository.findById(id).orElse(null);
     }
-    public Iterable<Doctor> findAll(){
-        return doctorRepository.findAll();
+    public void deleteById(String id){
+        doctorRepository.deleteById(id);
+    }
+    public List<Doctor> findAllByHospitalId(String id){return doctorRepository.findAllByHospitalId(id);}
+
+    public boolean checkDoctorByIdAndHospitalId(String id, String hospitalId) {
+        List<Doctor> doctors = findAllByHospitalId(hospitalId);
+        Map<String, Doctor> hashDoctor = new HashMap<>();
+
+        for (Doctor doctor : doctors) {
+            hashDoctor.put(doctor.getId(), doctor);
+        }
+
+        return hashDoctor.containsKey(id);
     }
 }
